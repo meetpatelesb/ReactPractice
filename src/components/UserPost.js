@@ -1,16 +1,12 @@
 import "./UserPost.css";
+import PostComment from "./PostComment";
 import React, { useEffect, useState } from "react";
 import { useLocation,Link } from "react-router-dom";
 
 const UserPost = () => {
   const location = useLocation();
 
-  const [post, setPost] = useState([{
-    userId: "",
-    id: "",
-    title: "",
-    body: "",
-  }]);
+  const [post, setPost] = useState([]);
    const [visible, setVisible] = useState(5);
 
   
@@ -47,7 +43,8 @@ const UserPost = () => {
               <p className="uid">{upost.id}</p>
               <h3 className="title">{upost.title}</h3>
               <h5 className="desc">{upost.body}</h5>
-              <button className="btn"><Link to={'/post-comment'} state={upost.id} className="btn-text">Views Comments</Link></button>
+              <PostComment id={upost.id}/>
+              {/* <button className="btn"><Link to={'/post-comment'} state={upost.id} className="btn-text">Views Comments</Link></button> */}
             </div>
           );
         })}
