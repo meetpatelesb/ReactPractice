@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 
 const PostComment = (props) => {
   const commentId = props.id;
-  console.log(commentId);
+  // console.log(commentId);
   // const location = useLocation();
 
   const [comment, setComment] = useState([]);
@@ -21,7 +21,7 @@ const PostComment = (props) => {
       `https://jsonplaceholder.typicode.com/posts/${commentId}/comments`
     );
     const comments = await res.json();
-    console.log(comments);
+    // console.log(comments);
     setComment(comments);
   };
 
@@ -39,9 +39,8 @@ const PostComment = (props) => {
       </button>
       {visible &&
         comment.map((com) => {
-          const { postId, id, name, email, body } = com;
-          console.log(postId);
-          return (
+          const { id, name, email, body } = com;
+        return (
             <>
               <div className="post">
                 <p className="uid">{id}</p>

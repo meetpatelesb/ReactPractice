@@ -23,9 +23,9 @@ const UserPost = () => {
 
     const res =   await fetch(`https://jsonplaceholder.typicode.com/posts?userId=${id}`)
     const post = await res.json();
-    console.log(post)
+    // console.log(post)
     setPost(post) 
-    console.log(post+"post")
+    // console.log(post+"post")
 
   };  
   let postCount = 0;
