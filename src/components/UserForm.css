@@ -1,3 +1,7 @@
 textarea{
   resize: none;
 }
+.certificate{
+  width: 100%;
+  padding: 2px 5px;
+}
