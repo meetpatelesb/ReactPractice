@@ -2,10 +2,15 @@ import { Fragment } from "react";
 import "./Transaction.css";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import Pagination from "./Pagination";
+
 const Transaction = () => {
   const retrivedata = JSON.parse(localStorage.getItem("transactionForm"));
   const [sortedField, setSortedField] = useState({});
   const [groupby, setGroupby] = useState({});
+  const [currentPage,setCurrentPage]=useState(1);
+  const [postPerPage,setPostPerPage]=useState(5);
+  const lastPost = currentPage*postPerPage;
   let sortedData = [...retrivedata];
   const months = [
     "January 2023",
