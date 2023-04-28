@@ -5,6 +5,7 @@ import { useState } from "react";
 const Transaction = () => {
   const retrivedata = JSON.parse(localStorage.getItem("transactionForm"));
   const [sortedField, setSortedField] = useState({});
+  const [groupby, setGroupby] = useState({});
   let sortedData = [...retrivedata];
   const months = [
     "January 2023",
@@ -85,15 +86,15 @@ const Transaction = () => {
       console.log(months.indexOf("January 2023"));
       sortedData.sort((a, b) => {
         return (
-          months.indexOf(a[sortedField.key]) -
-          months.indexOf(b[sortedField.key])
+          months.indexOf(a[sortedField?.key]?.value) -
+          months.indexOf(b[sortedField?.key]?.value)
         );
       });
     } else if (sortedField.direction === "descending") {
       sortedData.sort((a, b) => {
         return (
-          months.indexOf(b[sortedField.key]) -
-          months.indexOf(a[sortedField.key])
+          months.indexOf(b[sortedField?.key]?.value) -
+          months.indexOf(a[sortedField?.key]?.value)
         );
       });
     }
@@ -116,10 +117,54 @@ const Transaction = () => {
       return 0;
     });
   }
+  // for group by
+  const groupBy = (e) => {
+    let field = e.target.value;
+    const gData = [...retrivedata];
+    // console.log(field)
+    // console.log(gData)
+    let groupData = {};
+    if (field === "none") {
+      setGroupby(groupData);
+    } else {
+      gData.forEach((items) => {
+        // console.log(items)
+        const item = items[field]?.value;
+        // console.log(item,'col')
+        // console.log(items?.transactionAmount?.value)
+
+        groupData[item] = groupData[item] ?? [];
+        groupData[item].push(items);
+        // console.log(groupData[item]);
+        // console.log("dataaaaaaaaa");
+        // console.log(groupData);
+        setGroupby(groupData);
+      });
+    }
+    // console.log("getdata");
+    // console.log(groupData)
+    // console.log("setdata");
+  };
+  console.log(groupby);
 
   return (
     <>
       <div className="details">
+        <>
+          <label>Group By:</label>
+          <select
+            className="groupby"
+            onChange={(e) => {
+              groupBy(e);
+            }}
+          >
+            <option value="none">None</option>
+            <option value="monthYear">Month Year</option>
+            <option value="transactionType">Transaction Type</option>
+            <option value="fromAccount">From Account</option>
+            <option value="toAccount">To Account</option>
+          </select>
+        </>
         <table>
           <thead>
             <th
@@ -175,41 +220,96 @@ const Transaction = () => {
             <th>Action</th>
           </thead>
           <tbody>
-            {sortedData.map((transaction) => {
-              return (
-                <tr>
-                  <td>{transaction.transactionDate.value}</td>
-                  <td>{transaction.monthYear.value}</td>
-                  <td>{transaction.transactionType.value}</td>
-                  <td>{transaction.fromAccount.value}</td>
-                  <td>{transaction.toAccount.value}</td>
-                  <td>
-                    {Intl.NumberFormat("en-IN", {
-                      style: "currency",
-                      currency: "INR",
-                    }).format(transaction.transactionAmount.value)}
-                  </td>
-                  <td>
-                    <img
-                      src={transaction.receipt.value}
-                      width={50}
-                      height={50}
-                      alt=""
-                    />
-                  </td>
-                  <td>{transaction.notes.value}</td>
-                  <td>
-                    <a href="#">View</a>
-                  </td>
-                </tr>
-              );
-            })}
+            {sortedData.map((transaction) => (
+              <tr>
+                <td>{transaction.transactionDate.value}</td>
+                <td>{transaction.monthYear.value}</td>
+                <td>{transaction.transactionType.value}</td>
+                <td>{transaction.fromAccount.value}</td>
+                <td>{transaction.toAccount.value}</td>
+                <td>
+                  {Intl.NumberFormat("en-IN", {
+                    style: "currency",
+                    currency: "INR",
+                  }).format(transaction.transactionAmount.value)}
+                </td>
+                <td>
+                  <img
+                    src={transaction.receipt.value}
+                    width={50}
+                    height={50}
+                    alt=""
+                  />
+                </td>
+                <td>{transaction.notes.value}</td>
+                <td>
+                  <a href="#">View</a>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
 
         <button className="createBtn">
           <Link to={"/"}>Create Transaction</Link>{" "}
         </button>
+
+        <div className="groupDetails">
+          {Object.keys(groupby).map((d, index) => {
+            if (d !== undefined) {
+              return (
+                <>
+                  <h2>{d}</h2>
+                  <table>
+                    <thead>
+                      <th>Transaction Date</th>
+                      <th>Month Year</th>
+                      <th>Transaction Type</th>
+                      <th>From Account</th>
+                      <th>To Account</th>
+                      <th>Amount</th>
+                      <th>Receipt</th>
+                      <th>Notes</th>
+                      <th>Action</th>
+                    </thead>
+
+                    {groupby[d].map((values) => (
+                      <>
+                        <tr>
+                          <td>{values.transactionDate.value}</td>
+                          <td>{values.monthYear.value}</td>
+                          <td>{values.transactionType.value}</td>
+                          <td>{values.fromAccount.value}</td>
+                          <td>{values.toAccount.value}</td>
+                          <td>
+                            {Intl.NumberFormat("en-IN", {
+                              style: "currency",
+                              currency: "INR",
+                            }).format(values.transactionAmount.value)}
+                          </td>
+                          <td>
+                            <img
+                              src={values.receipt.value}
+                              width={50}
+                              height={50}
+                              alt=""
+                            />
+                          </td>
+                          <td>{values.notes.value}</td>
+                          <td>
+                            <a href="#">View</a>
+                          </td>
+                        </tr>
+                      </>
+                    ))}
+                  </table>
+                </>
+              );
+            } else {
+              <></>;
+            }
+          })}
+        </div>
       </div>
     </>
   );
