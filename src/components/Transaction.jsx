@@ -1,10 +1,9 @@
-// import { Fragment } from "react";
+
 import "./Transaction.css";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-// import Pagination from "./Pagination";
 import Table from "./Table";
-// import GroupBy from "./GroupBy";
+
 
 const Transaction = () => {
   const retrivedata = JSON.parse(localStorage.getItem("transactionForm"));
@@ -117,8 +116,8 @@ const Transaction = () => {
   // for group by
   const groupBy = (e) => {
     let field = e.target.value;
-    console.log("filed",field);
-  
+    console.log("filed", field);
+
     const gData = [...retrivedata];
 
     let groupData = {};
@@ -127,7 +126,7 @@ const Transaction = () => {
     } else {
       gData.forEach((items) => {
         console.log("value");
-       console.log(items[field]?.value);
+        console.log(items[field]?.value);
         const item = items[field]?.value;
         groupData[item] = groupData[item] ?? [];
         groupData[item].push(items);
@@ -136,8 +135,7 @@ const Transaction = () => {
       });
     }
   };
-  // console.log(groupby);
-  // setSortedData(paginationData)
+  
 
   return (
     <>
@@ -166,25 +164,19 @@ const Transaction = () => {
 
         <div className="groupDetails">
           {Object.keys(groupby).map((d, index) => {
-            // console.log("satrt")
-            // console.log(groupby[d])
-            // console.log("end")
+         
             if (d !== undefined) {
-              
-              return(
+              return (
                 <>
-              <h2>{d}</h2>
-              <Table records={groupby[d]} />
-              
+                  <h2>{d}</h2>
+                  <Table records={groupby[d]} />
                 </>
-              )
+              );
             } else {
               <></>;
             }
           })}
         </div>
-
-       
       </div>
     </>
   );

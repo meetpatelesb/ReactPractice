@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect, useState } from "react";
-
+import { Link } from "react-router-dom";
 const months = [
   "January 2023",
   "February 2023",
@@ -18,25 +18,10 @@ const months = [
 
 const Table = (props) => {
   let records = props.records;
-  // console.log("props");
-  // console.log(props)
-
+ 
   let [sortedData, setSortedData] = useState(records);
   const [sortedField, setSortedField] = useState({});
 
-  // // pagination.........
-  // const [currentPage, setCurrentPage] = useState(1);
-  // const [postPerPage, setPostPerPage] = useState(3);
-  // const lastPostIndex = currentPage * postPerPage;
-  // const firstPostIndex = lastPostIndex - postPerPage;
-  // const paginationData = sortedData.slice(firstPostIndex, lastPostIndex);
-
-  // let totalPosts = records.length;
-  // let pages = [];
-  // for (let i = 1; i <= Math.ceil(totalPosts / postPerPage); i++) {
-  //   pages.push(i);
-  // }  
-  // let nThPage = pages.length;
 
   const sorting = (key) => {
     let direction = "ascending";
@@ -93,7 +78,7 @@ const Table = (props) => {
     } else if (sortedField.key === "monthYear") {
       let newData = sortedData;
       if (sortedField.direction === "ascending") {
-        // console.log(months.indexOf("January 2023"));
+       
         newData.sort((a, b) => {
           return (
             months.indexOf(a[sortedField?.key]?.value) -
@@ -115,7 +100,7 @@ const Table = (props) => {
       let newData = sortedData;
 
       newData.sort((a, b) => {
-        // console.log(a[sortedField?.key].value < b[sortedField?.key].value);
+    
         if (
           a[sortedField?.key]?.value?.toLowerCase() <
           b[sortedField?.key]?.value?.toLowerCase()
@@ -140,8 +125,7 @@ const Table = (props) => {
   const lastPostIndex = currentPage * postPerPage;
   const firstPostIndex = lastPostIndex - postPerPage;
   const paginationData = records.slice(firstPostIndex, lastPostIndex);
-  // console.log("pagination")
-  // console.log(paginationData);
+  
 
   let totalPosts = records.length;
   let pages = [];
@@ -208,7 +192,6 @@ const Table = (props) => {
         </thead>
         <tbody>
           {paginationData.map((transaction, index) => (
-            
             <tr>
               <td>{transaction.transactionDate.value}</td>
               <td>{transaction.monthYear.value}</td>
@@ -231,9 +214,9 @@ const Table = (props) => {
               </td>
               <td>{transaction.notes.value}</td>
               <td>
-                <a href="#" key={index}>
+                <Link to={`/transaction/`} className="btn-text">
                   View
-                </a>
+                </Link>
               </td>
             </tr>
           ))}
