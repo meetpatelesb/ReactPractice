@@ -159,7 +159,7 @@ const Transaction = () => {
         <Table records={retrivedata} />
 
         <button className="createBtn">
-          <Link to={"/"}>Create Transaction</Link>{" "}
+          <Link to={"/create"}>Create Transaction</Link>{" "}
         </button>
 
         <div className="groupDetails">

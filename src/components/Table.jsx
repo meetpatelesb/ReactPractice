@@ -216,7 +216,7 @@ const Table = (props) => {
               </td>
               <td>{transaction.notes.value}</td>
               <td>
-                <Link to={`/${transaction.id}`}>Edit</Link>
+                <Link to={`/create/${transaction.id}`}>Edit</Link>
               </td>
               <td>
                 <Link to={`/transaction/${transaction.id}`} className="btn-text">
