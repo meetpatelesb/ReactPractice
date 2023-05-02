@@ -485,12 +485,26 @@ const TransactonForm = () => {
       isToAcc &&
       isType
     ) {
+      // console.log("data")
+      // console.log(data)
+      // console.log(data['notes'].value)
+
       if (localStorage.getItem("transactionForm")) {
         const retrivedata = JSON.parse(localStorage.getItem("transactionForm"));
+        console.log(retrivedata)
+     const prevDataIndex = Object.keys(retrivedata).length -1 ;
+        console.log(retrivedata[prevDataIndex])
+       
+        const prevId = retrivedata[prevDataIndex]['id'];
+        data['id'] = prevId +1;
+        console.log(prevId)
+        console.log(data['id'])
+
         retrivedata.push(data);
 
         localStorage.setItem("transactionForm", JSON.stringify(retrivedata));
       } else {
+        data['id'] =1;
         localStorage.setItem("transactionForm", JSON.stringify([data]));
       }
       navigate("/transaction");

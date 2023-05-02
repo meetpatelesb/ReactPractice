@@ -11,7 +11,7 @@ function App() {
   <Routes>
     <Route path="/" element={<TransactionForm/>}/>
     <Route path="/transaction" element={<Transaction/>}/>
-    <Route path="/transaction/id" element={<View/>}/>
+    <Route path="/transaction/:id" element={<View/>}/>
   </Routes>
 </BrowserRouter>
 

@@ -21,6 +21,7 @@ const Table = (props) => {
  
   let [sortedData, setSortedData] = useState(records);
   const [sortedField, setSortedField] = useState({});
+  const [count,setCount]=useState(0);
 
 
   const sorting = (key) => {
@@ -121,7 +122,7 @@ const Table = (props) => {
 
   // pagination.........
   const [currentPage, setCurrentPage] = useState(1);
-  const [postPerPage, setPostPerPage] = useState(2);
+  const [postPerPage, setPostPerPage] = useState(3);
   const lastPostIndex = currentPage * postPerPage;
   const firstPostIndex = lastPostIndex - postPerPage;
   const paginationData = records.slice(firstPostIndex, lastPostIndex);
@@ -188,10 +189,11 @@ const Table = (props) => {
           >
             Notes
           </th>
+          <th>Edit</th>
           <th>Action</th>
         </thead>
         <tbody>
-          {paginationData.map((transaction, index) => (
+          {paginationData.map((transaction, count) => (
             <tr>
               <td>{transaction.transactionDate.value}</td>
               <td>{transaction.monthYear.value}</td>
@@ -214,12 +216,16 @@ const Table = (props) => {
               </td>
               <td>{transaction.notes.value}</td>
               <td>
-                <Link to={`/transaction/`} className="btn-text">
+                <Link to={`/${transaction.id}`}>Edit</Link>
+              </td>
+              <td>
+                <Link to={`/transaction/${transaction.id}`} className="btn-text">
                   View
                 </Link>
               </td>
-            </tr>
-          ))}
+            </tr> 
+          ))
+          }
         </tbody>
       </table>
       <div className="pagination">
