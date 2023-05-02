@@ -12,6 +12,7 @@ function App() {
     <Route path="/" element={<TransactionForm/>}/>
     <Route path="/transaction" element={<Transaction/>}/>
     <Route path="/transaction/:id" element={<View/>}/>
+     <Route path="/:id" element={<TransactionForm/>}/>
   </Routes>
 </BrowserRouter>
 

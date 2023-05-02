@@ -1,7 +1,8 @@
 import "./Form.css";
 import React, { useState } from "react";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 // const getTransactionDetails = () => {
 //   const storeDetails = localStorage.getItem("transactionForm");
@@ -19,6 +20,10 @@ import { useNavigate } from "react-router-dom";
 //   return JSON.stringify(storeDetails);
 // };
 const TransactonForm = () => {
+  const { id } = useParams();
+  const index = id - 1;
+  const updateData = JSON.parse(localStorage.getItem("transactionForm"));
+
   // const [details, setDetails] = useState({
   //   transactionDate: "",
   //   monthYear: "",
@@ -87,6 +92,20 @@ const TransactonForm = () => {
   const [isType, setType] = useState(false);
 
   const navigate = useNavigate();
+
+  console.log("update");
+  console.log(updateData[index]);
+
+  useEffect(() => {
+    for (const key in updateData) {
+      if (parseInt(updateData[key].id) === parseInt(id)) {
+        console.log("same to same");
+        setData(updateData[key]);
+        break;
+      }
+    }
+    // esline-disable-next-line
+  }, []);
 
   // useEffect(() => {
   //   localStorage.setItem("transactionForm", JSON.stringify(data));
@@ -452,6 +471,18 @@ const TransactonForm = () => {
   console.log("data.....");
   console.log(data, "initial value");
 
+  const removeImage =()=>{
+    // setData(...data,data.receipt.value="")
+
+    setData((prev) => ({
+      ...prev,
+      receipt: {
+        ...prev.receipt,
+        value: "",
+      },
+    }));
+  }
+
   const submitHandler = (e) => {
     e.preventDefault();
     AmountHandler(data.transactionAmount.value);
@@ -491,20 +522,31 @@ const TransactonForm = () => {
 
       if (localStorage.getItem("transactionForm")) {
         const retrivedata = JSON.parse(localStorage.getItem("transactionForm"));
-        console.log(retrivedata)
-     const prevDataIndex = Object.keys(retrivedata).length -1 ;
-        console.log(retrivedata[prevDataIndex])
-       
-        const prevId = retrivedata[prevDataIndex]['id'];
-        data['id'] = prevId +1;
-        console.log(prevId)
-        console.log(data['id'])
+        console.log(retrivedata);
 
-        retrivedata.push(data);
+        if (id) {
+          for (const e in retrivedata) {
+            if (parseInt(retrivedata[e].id) === parseInt(id)) {
+              console.log("keyyyyy id", e.id);
+              data["id"] = id;
+              retrivedata[e] = data;
+            }
+          }
+        } else {
+          const prevDataIndex = Object.keys(retrivedata).length - 1;
+          console.log(retrivedata[prevDataIndex]);
+
+          const prevId = retrivedata[prevDataIndex]["id"];
+          data["id"] = prevId + 1;
+          console.log(prevId);
+          console.log(data["id"]);
+
+          retrivedata.push(data);
+        }
 
         localStorage.setItem("transactionForm", JSON.stringify(retrivedata));
       } else {
-        data['id'] =1;
+        data["id"] = 1;
         localStorage.setItem("transactionForm", JSON.stringify([data]));
       }
       navigate("/transaction");
@@ -675,14 +717,29 @@ const TransactonForm = () => {
           <br></br>
           <label className="label">Receipt:</label>
           <div className="input">
-            <input
-              type="file"
-              name="receipt"
-              alt="Receipt is not found"
-              onChange={(e) => {
-                ReceiptHandler(e);
-              }}
-            ></input>
+            {data.receipt.value ? (
+              <>
+                <img src={data.receipt.value} width={50} height={50} alt="" />
+                <span onClick={removeImage} className="cross">
+                  X
+                </span>
+              </>
+            ) : (
+              <>
+                <input
+                  type="file"
+                  name="receipt"
+                  alt="Receipt is not found"
+                  onChange={(e) => {
+                    ReceiptHandler(e);
+                  }}
+                ></input>
+                <span onClick={removeImage} className="cross">
+                  X
+                </span>
+              </>
+            )}
+
             <span>{data.receipt.error}</span>
           </div>
           <br></br>
@@ -703,6 +760,10 @@ const TransactonForm = () => {
           <button type="submit" className="submitBtn">
             Submit
           </button>
+
+          <Link to={`/transaction`} className="showTrn">
+            Show Transaction
+          </Link>
         </form>
       </div>
     </>
