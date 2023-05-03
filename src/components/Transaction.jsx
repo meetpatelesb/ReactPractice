@@ -1,11 +1,11 @@
-
 import "./Transaction.css";
-import { Link,useLocation } from "react-router-dom";
-import { useState} from "react";
+import { Link,  useLocation, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import Table from "./Table";
 
 
 const Transaction = () => {
+  const navigate = useNavigate();
   const retrivedata = JSON.parse(localStorage.getItem("transactionForm"));
   const [groupby, setGroupby] = useState({});
   // const [sortedField, setSortedField] = useState({});
@@ -135,7 +135,11 @@ const Transaction = () => {
       });
     }
   };
-  
+
+  const logout = () => {
+    localStorage.removeItem("logindata");
+    navigate('/login')
+  };
 
   return (
     <>
@@ -159,12 +163,15 @@ const Transaction = () => {
         <Table records={retrivedata} />
 
         <button className="createBtn">
-          <Link to={"/create"}>Create Transaction</Link>{" "}
+          <Link to={"/create"}>Create Transaction</Link>
+        </button>
+
+        <button className="logoutBtn" onClick={logout}>
+          Logout
         </button>
 
         <div className="groupDetails">
           {Object.keys(groupby).map((d, index) => {
-         
             if (d !== undefined) {
               return (
                 <>

@@ -93,13 +93,9 @@ const TransactonForm = () => {
 
   const navigate = useNavigate();
 
-  console.log("update");
-  console.log(updateData[index]);
-
   useEffect(() => {
     for (const key in updateData) {
-      if (parseInt(updateData[key].id) === parseInt(id)) {
-        console.log("same to same");
+      if (key && parseInt(updateData[key]?.id) === parseInt(id)) {
         setData(updateData[key]);
         break;
       }
@@ -135,8 +131,6 @@ const TransactonForm = () => {
   // onchange functions
   const DateHandler = (e) => {
     const date = e;
-    console.log(date, "date");
-    // console.log(date);
     // setData((prev) => ({
     //   ...prev,
     //   transactionDate: {
@@ -370,8 +364,6 @@ const TransactonForm = () => {
       }));
       setAmount(false);
     }
-
-    console.log(value);
   };
 
   const ReceiptHandler = (e) => {
@@ -427,7 +419,7 @@ const TransactonForm = () => {
 
   const NotesHandler = (e) => {
     const notes = e;
-    console.log(notes);
+
     setData((prev) => ({
       ...prev,
       notes: {
@@ -468,10 +460,7 @@ const TransactonForm = () => {
     }
   };
 
-  console.log("data.....");
-  console.log(data, "initial value");
-
-  const removeImage =()=>{
+  const removeImage = () => {
     // setData(...data,data.receipt.value="")
 
     setData((prev) => ({
@@ -481,7 +470,7 @@ const TransactonForm = () => {
         value: "",
       },
     }));
-  }
+  };
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -493,7 +482,6 @@ const TransactonForm = () => {
     NotesHandler(data.notes.value);
     MonthHandler(data.monthYear.value);
     ReceiptHandler(data.receipt.value);
-    console.log(data.fromAccount.error, "error of account");
 
     console.log(
       isAmount,
@@ -516,30 +504,21 @@ const TransactonForm = () => {
       isToAcc &&
       isType
     ) {
-      // console.log("data")
-      // console.log(data)
-      // console.log(data['notes'].value)
-
       if (localStorage.getItem("transactionForm")) {
         const retrivedata = JSON.parse(localStorage.getItem("transactionForm"));
-        console.log(retrivedata);
 
         if (id) {
           for (const e in retrivedata) {
             if (parseInt(retrivedata[e].id) === parseInt(id)) {
-              console.log("keyyyyy id", e.id);
               data["id"] = id;
               retrivedata[e] = data;
             }
           }
         } else {
           const prevDataIndex = Object.keys(retrivedata).length - 1;
-          console.log(retrivedata[prevDataIndex]);
 
           const prevId = retrivedata[prevDataIndex]["id"];
-          data["id"] = prevId + 1;
-          console.log(prevId);
-          console.log(data["id"]);
+          data["id"] = parseInt(prevId) + 1;
 
           retrivedata.push(data);
         }
@@ -547,6 +526,7 @@ const TransactonForm = () => {
         localStorage.setItem("transactionForm", JSON.stringify(retrivedata));
       } else {
         data["id"] = 1;
+
         localStorage.setItem("transactionForm", JSON.stringify([data]));
       }
       navigate("/transaction");

@@ -25,6 +25,25 @@ const Registration = () => {
     setError(validate(regData));
   };
 
+//   if(localStorage.getItem("registration")){
+// const retriveEmail = localStorage.getItem("registration");
+// for (const key in retriveEmail) {
+//   if (retriveEmail[key].email !== regData.email) {
+//     error.regEmail = "email already registered!!";
+//     break;
+//   } else {
+//     // error.login = ""
+//     setError((prev) => {
+//       return {
+//         ...prev,
+//         regEmail: "",
+//       };
+//     });
+//     break;
+//   }
+// }
+//   }
+
   const validate = (regData) => {
   const error = {}
     const regex = /^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/;
@@ -35,15 +54,36 @@ const Registration = () => {
 
     if (!regex.test(regData["email"])) {
       error.email = "email is required";
-    }
 
-    if (regData["password"].length <= 4) {
-      error.password = "password is required";
+      
+      if (regData["password"].length <= 4) {
+        error.password = "password is required";
+      }
+
+      // if (localStorage?.getItem("registration")) {
+      //   const retriveEmail = localStorage.getItem("registration");
+      //   for (const key in retriveEmail) {
+      //     console.log(retriveEmail[key].email === regData["email"]);
+      //     if (retriveEmail[key].email === regData['email']) {
+      //       error.regEmail = "email already registered!!";
+      //       break;
+      //     } else {
+      //       // error.login = ""
+      //       setError((prev) => {
+      //         return {
+      //           ...prev,
+      //           regEmail: "",
+      //         };
+      //       });
+      //       break;
+      //     }
+      //   }
+      // }
     }
     return error;
   };
 
-  
+
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -51,7 +91,8 @@ const Registration = () => {
     setError(validate(regData))
     setIsSubmit(true)
 console.log(error)
-    if(Object.keys(error).length === 0){
+console.log(Object.keys(error).length);
+    if(Object.keys(error).length === 0 && issubmit === true){
       console.log("submit")
 
       if (localStorage.getItem("registration")) {
@@ -110,6 +151,7 @@ let lastId = retrivedata[lastIdIndex].id;
             onChange={(e) => hasChange(e)}
           ></input>
           <span>{error.password}</span>
+          <span>{error.regEmail}</span>
           <br></br>
           <button type="submit" className="ViewBtn">
             Submit

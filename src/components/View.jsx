@@ -6,7 +6,7 @@ const View = () => {
 
     const {id}= useParams();
     // params give id no. but we need index to fetch data
-    const index = id -1;
+    const index = id - 1;
 
     const retrivedata = JSON.parse(localStorage.getItem("transactionForm"));
     return (

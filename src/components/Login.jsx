@@ -5,17 +5,17 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";
 
-const Login = () => {
+const   Login = () => {
   const registrationData = JSON.parse(localStorage.getItem("registration"));
 
   const navigate = useNavigate();
   const [loginData, setRegData] = useState({
-    email: "",
-    password: "",
+    // email: "",
+    // password: "",
   });
 
   const [error, setError] = useState({});
-  const [issubmit, setIsSubmit] = useState(false);
+  // const [issubmit, setIsSubmit] = useState(false);
 
   const hasChange = (e) => {
     const { name, value } = e.target;
@@ -23,48 +23,58 @@ const Login = () => {
     setRegData((prev) => {
       return { ...prev, [name]: value };
     });
-    console.log(loginData);
+
 
     setError(validate(loginData));
   };
 
   const validate = (loginData) => {
     const error = {};
-    console.log(loginData);
+
     const regex = /^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/;
 
-    if (!regex.test(loginData["email"])) {
+    if (!regex?.test(loginData["email"])) {
       error.email = "email is required";
     }
 
-    if (loginData["password"].length <= 4) {
+    if (loginData["password"]?.length <= 4) {
       error.password = "password is required";
     } else {
       for (const key in registrationData) {
+
         if (
           registrationData[key].email !== loginData.email ||
           registrationData[key].password !== loginData.password
         ) {
           error.login = "email & password is not correct";
           break;
+        }else{
+          // error.login = ""
+          setError((prev) => {
+            return {
+              ...prev,
+              login: "",
+            };
+          });
+          break;
         }
       }
     }
     return error;
   };
-
+ 
   const submitHandler = (e) => {
     e.preventDefault();
     hasChange(e);
-    console.log(loginData);
-    setIsSubmit(true);
-
-    
+ 
+    // setIsSubmit(true);
   };
 
+
   useEffect(() => {
-    if (Object.keys(error).length === 0) {
-      console.log("keyyyyyyyyyyyyyyy")
+   
+    if (Object.keys(error).length === 0 ) {
+    
       let flag = false;
       for (const key in registrationData) {
         if (
@@ -88,9 +98,7 @@ const Login = () => {
           );
           counter += 1;
         }
-
         loginData["token"] = result;
-
         localStorage.setItem("logindata", JSON.stringify(loginData));
 
         navigate("/transaction");
@@ -124,13 +132,13 @@ const Login = () => {
           <span>{error.password}</span>
           <span>{error.login}</span>
           <br></br>
-          <button type="submit" className="ViewBtn">
+          <button type="submit" id="submit" className="ViewBtn">
             Submit
           </button>
           <br></br>
         </form>
-        <Link to={"/create"} className="loginBtn">
-          Login
+        <Link to={"/"} className="loginBtn">
+          Registration
         </Link>
       </div>
     </>
