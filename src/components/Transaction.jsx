@@ -8,6 +8,8 @@ const Transaction = () => {
   const navigate = useNavigate();
   const retrivedata = JSON.parse(localStorage.getItem("transactionForm"));
   const [groupby, setGroupby] = useState({});
+
+  const [search,setSearch]=useState();
   // const [sortedField, setSortedField] = useState({});
   // let [sortedData,setSortedData]=useState(retrivedata)
 
@@ -119,6 +121,7 @@ const Transaction = () => {
     console.log("filed", field);
 
     const gData = [...retrivedata];
+      const search = [...retrivedata];
 
     let groupData = {};
     if (field === "none") {

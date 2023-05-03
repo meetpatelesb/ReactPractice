@@ -18,15 +18,13 @@ const months = [
 
 const Table = (props) => {
   let records = props.records;
- 
+
   let [sortedData, setSortedData] = useState(records);
   const [sortedField, setSortedField] = useState({});
-  const [count,setCount]=useState(0);
-
 
   const sorting = (key) => {
+    setCurrentPage(1);
     let direction = "ascending";
-   
 
     if (sortedField.key === key && sortedField.direction === "ascending") {
       direction = "descending";
@@ -36,16 +34,15 @@ const Table = (props) => {
     ) {
       direction = "normal";
     }
-    console.log(key, "keyyy2", direction);
     setSortedField({ key, direction });
-
+    console.log(key, "keyyy2", direction);
   };
 
   useEffect(() => {
     if (sortedField.direction === "normal") {
-      setSortedData(records);
+      setSortedData(sortedData);
     } else if (sortedField.key === "transactionAmount") {
-      let newData = sortedData;
+      let newData = [...sortedData];
       if (sortedField.direction === "ascending") {
         newData.sort((a, b) => {
           return a[sortedField?.key]?.value - b[sortedField?.key]?.value;
@@ -57,7 +54,7 @@ const Table = (props) => {
       }
       setSortedData(newData);
     } else if (sortedField.key === "transactionDate") {
-      let newData = sortedData;
+      let newData = [...sortedData];
       if (sortedField.direction === "ascending") {
         newData.sort((a, b) => {
           return (
@@ -65,9 +62,7 @@ const Table = (props) => {
             new Date(b[sortedField?.key]?.value)
           );
         });
-        
       } else if (sortedField.direction === "descending") {
-        let newData = sortedData;
         newData.sort((a, b) => {
           return (
             new Date(b[sortedField?.key]?.value) -
@@ -77,18 +72,15 @@ const Table = (props) => {
       }
       setSortedData(newData);
     } else if (sortedField.key === "monthYear") {
-      let newData = sortedData;
+      let newData = [...sortedData];
       if (sortedField.direction === "ascending") {
-       
         newData.sort((a, b) => {
           return (
             months.indexOf(a[sortedField?.key]?.value) -
             months.indexOf(b[sortedField?.key]?.value)
           );
         });
-      
       } else if (sortedField.direction === "descending") {
-        let newData = sortedData;
         newData.sort((a, b) => {
           return (
             months.indexOf(b[sortedField?.key]?.value) -
@@ -98,10 +90,9 @@ const Table = (props) => {
       }
       setSortedData(newData);
     } else {
-      let newData = sortedData;
+      let newData = [...sortedData];
 
       newData.sort((a, b) => {
-    
         if (
           a[sortedField?.key]?.value?.toLowerCase() <
           b[sortedField?.key]?.value?.toLowerCase()
@@ -115,20 +106,54 @@ const Table = (props) => {
         ) {
           return sortedField.direction === "ascending" ? 1 : -1;
         }
+        setSortedData(newData);
         return 0;
       });
     }
   }, [sortedField]);
+
+  // searching.....
+
+  const search = (e) => {
+    console.log(e.target.value);
+    console.log(records);
+    if (e.target.value === "") {
+      setSortedData(records);
+    } else {
+      let searchData = records.filter((index) => (
+        index.fromAccount.value.toLowerCase().includes(e.target.value) ||
+          index.monthYear.value.toLowerCase().includes(e.target.value) ||
+          index.notes.value.toLowerCase().includes(e.target.value) ||
+          index.toAccount.value.toLowerCase().includes(e.target.value) ||
+          index.transactionDate.value.toLowerCase().includes(e.target.value) ||
+          index.transactionType.value.toLowerCase().includes(e.target.value) ||
+          index.transactionAmount.value.toLowerCase().includes(e.target.value)
+       ) );
+        // console.log(index);
+        // for (let field in index) {
+        //   console.log(index[field]);
+        //   console.log(index[field].value);
+        //   if (index[field] !== "receipt"){
+        //   if(index[field].value !== undefined){
+
+        //     index[field].value.toLowerCase().includes(e.target.value);
+        //   }
+        // }
+        // }
+      console.log(searchData);
+      setSortedData(searchData);
+    }
+  };
 
   // pagination.........
   const [currentPage, setCurrentPage] = useState(1);
   const [postPerPage, setPostPerPage] = useState(3);
   const lastPostIndex = currentPage * postPerPage;
   const firstPostIndex = lastPostIndex - postPerPage;
-  const paginationData = records.slice(firstPostIndex, lastPostIndex);
-  
+  let pagiData = [...sortedData];
+  const paginationData = pagiData.slice(firstPostIndex, lastPostIndex);
 
-  let totalPosts = records.length;
+  let totalPosts = pagiData.length;
   let pages = [];
   for (let i = 1; i <= Math.ceil(totalPosts / postPerPage); i++) {
     pages.push(i);
@@ -137,6 +162,13 @@ const Table = (props) => {
 
   return (
     <>
+      <input
+        type="text"
+        onChange={search}
+        placeholder="Search here"
+        className="search"
+      ></input>
+
       <table>
         <thead>
           <th
@@ -193,7 +225,7 @@ const Table = (props) => {
           <th>Action</th>
         </thead>
         <tbody>
-          {paginationData.map((transaction, count) => (
+          {paginationData && (paginationData.map((transaction, count) => (
             <tr>
               <td>{transaction.transactionDate.value}</td>
               <td>{transaction.monthYear.value}</td>
@@ -219,13 +251,15 @@ const Table = (props) => {
                 <Link to={`/create/${transaction.id}`}>Edit</Link>
               </td>
               <td>
-                <Link to={`/transaction/${transaction.id}`} className="btn-text">
+                <Link
+                  to={`/transaction/${transaction.id}`}
+                  className="btn-text"
+                >
                   View
                 </Link>
               </td>
-            </tr> 
-          ))
-          }
+            </tr>
+          )))}
         </tbody>
       </table>
       <div className="pagination">
