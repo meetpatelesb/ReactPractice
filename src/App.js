@@ -11,7 +11,6 @@ const  App = ()=> {
             <Route path="/*" element={<Auth />} />
           </Routes>
         </BrowserRouter>
-  
   );
 }
 
