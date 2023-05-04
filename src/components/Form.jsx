@@ -710,10 +710,11 @@ const TransactonForm = () => {
                   type="file"
                   name="receipt"
                   alt="Receipt is not found"
+                  value={data.receipt.value}
                   onChange={(e) => {
                     ReceiptHandler(e);
                   }}
-                ></input>
+                ></input> 
                 <span onClick={removeImage} className="cross">
                   X
                 </span>

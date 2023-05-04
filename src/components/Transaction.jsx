@@ -2,6 +2,7 @@ import "./Transaction.css";
 import { Link,  useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Table from "./Table";
+import { Dropdown } from "./Dropdown";
 
 
 const Transaction = () => {
@@ -133,7 +134,6 @@ const Transaction = () => {
         const item = items[field]?.value;
         groupData[item] = groupData[item] ?? [];
         groupData[item].push(items);
-
         setGroupby(groupData);
       });
     }
@@ -141,8 +141,20 @@ const Transaction = () => {
 
   const logout = () => {
     localStorage.removeItem("logindata");
-    navigate('/login')
+    navigate('/public/login')
   };
+
+  const groupArr = [
+    "none",
+    "monthYear",
+    "transactionType",
+    "fromAccount",
+    "toAccount",
+  ];
+  //  const groupFun = (e) => {
+  //   console.log(e)
+  //    groupBy(e);
+  //  };
 
   return (
     <>
@@ -155,12 +167,8 @@ const Transaction = () => {
               groupBy(e);
             }}
           >
-            <option value="none">None</option>
-            <option value="monthYear">Month Year</option>
-            <option value="transactionType">Transaction Type</option>
-            <option value="fromAccount">From Account</option>
-            <option value="toAccount">To Account</option>
-          </select>
+            <Dropdown for={groupArr}/>
+            </select>
         </>
 
         <Table records={retrivedata} />

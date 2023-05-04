@@ -1,59 +1,73 @@
-// import "./Pagination.css";
-// import React from "react";
 
-// const Pagination = ({
-//   totalPosts,
-//   postsPerPage,
-//   setCurrentPage,
-//   currentPage,
-//   lastPostIndex,
-//   firstPostIndex,
-// }) => {
-//   let pages = [];
-//   for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage); i++) {
-//     pages.push(i);
-//   }
-//   let nThPage = pages.length;
-//   return (
-//     <>
-//       <div className="pagination">
-//         <button
-//           className="page"
-//           onClick={() => {
-//             if (currentPage !== 1) {
-//               setCurrentPage(currentPage - 1);
-//             }
-//           }}
-//         >
-//           Prev
-//         </button>
+import React from 'react'
+import { useEffect } from 'react';
+import { useState } from 'react';
 
-//         {pages.map((page, index) => {
-//           return (
-//             <button
-//               key={index}
-//               className={page == currentPage ? "active" : "page"}
-//               onClick={() => {
-//                 setCurrentPage(page);
-//               }}
-//             >
-//               {page}
-//             </button>
-//           );
-//         })}
+const Pagination = (props) => {
 
-//         <button
-//           className="page"
-//           onClick={() => {
-//             if(currentPage !== nThPage){
-//               setCurrentPage(currentPage + 1)
-//             } }}
-//         >
-//           Next
-//         </button>
-//       </div>
-//     </>
-//   );
-// };
+ const  sortedData = props.paginationRecords;
 
-// export default Pagination;
+  // pagination.........
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postPerPage, setPostPerPage] = useState(2);
+  // const [pages,setPages]=useState([]);
+  // const [nThPage,setNthPage] =useState();
+
+ const lastPostIndex = currentPage * postPerPage;
+ const firstPostIndex = lastPostIndex - postPerPage;
+ let pagiData = [...sortedData];
+ const paginationData = pagiData.slice(firstPostIndex, lastPostIndex);
+
+ let totalPosts = pagiData.length;
+let pages = [];
+ for (let i = 1; i <= Math.ceil(totalPosts / postPerPage); i++) {
+   pages.push(i);
+ }
+//  setPages(pages);
+let nThPage = pages.length;
+//  setNthPage(nThPage)
+  return (
+    <div>
+      <div className="pagination">
+        <button
+          className="page"
+          onClick={() => {
+            if (currentPage !== 1) {
+              setCurrentPage(currentPage - 1);
+            }
+          }}
+        >
+          Prev
+        </button>
+
+        {pages.map((page, index) => {
+          return (
+            <button
+              key={index}
+              className={page === currentPage ? "active" : "page"}
+              onClick={() => {
+                setCurrentPage(page);
+              }}
+            >
+              {page}
+            </button>
+          );
+        })}
+
+        <button
+          className="page"
+          onClick={() => {
+            if (currentPage !== nThPage) {
+              setCurrentPage(currentPage + 1);
+            }
+          }}
+        >
+          Next
+        </button>
+      </div>
+      ;
+    </div>
+  );
+}
+
+export default Pagination;

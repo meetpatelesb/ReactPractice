@@ -5,8 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 const Registration = () => {
-
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const [regData, setRegData] = useState({
     name: "",
     email: "",
@@ -14,7 +13,7 @@ const Registration = () => {
   });
 
   const [error, setError] = useState({});
-  const [issubmit,setIsSubmit] = useState(false);
+  const [issubmit, setIsSubmit] = useState(false);
 
   const hasChange = (e) => {
     const { name, value } = e.target;
@@ -25,37 +24,36 @@ const Registration = () => {
     setError(validate(regData));
   };
 
-//   if(localStorage.getItem("registration")){
-// const retriveEmail = localStorage.getItem("registration");
-// for (const key in retriveEmail) {
-//   if (retriveEmail[key].email !== regData.email) {
-//     error.regEmail = "email already registered!!";
-//     break;
-//   } else {
-//     // error.login = ""
-//     setError((prev) => {
-//       return {
-//         ...prev,
-//         regEmail: "",
-//       };
-//     });
-//     break;
-//   }
-// }
-//   }
+  //   if(localStorage.getItem("registration")){
+  // const retriveEmail = localStorage.getItem("registration");
+  // for (const key in retriveEmail) {
+  //   if (retriveEmail[key].email !== regData.email) {
+  //     error.regEmail = "email already registered!!";
+  //     break;
+  //   } else {
+  //     // error.login = ""
+  //     setError((prev) => {
+  //       return {
+  //         ...prev,
+  //         regEmail: "",
+  //       };
+  //     });
+  //     break;
+  //   }
+  // }
+  //   }
 
   const validate = (regData) => {
-  const error = {}
+    const error = {};
     const regex = /^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/;
 
     if (regData["name"].trim().length <= 3) {
       error.name = "name is required";
-    } 
+    }
 
     if (!regex.test(regData["email"])) {
       error.email = "email is required";
 
-      
       if (regData["password"].length <= 4) {
         error.password = "password is required";
       }
@@ -83,40 +81,33 @@ const Registration = () => {
     return error;
   };
 
-
-
   const submitHandler = (e) => {
     e.preventDefault();
     hasChange(e);
-    setError(validate(regData))
-    setIsSubmit(true)
-console.log(error)
-console.log(Object.keys(error).length);
-    if(Object.keys(error).length === 0 && issubmit === true){
-      console.log("submit")
+    setError(validate(regData));
+    setIsSubmit(true);
+    console.log(error);
+    console.log(Object.keys(error).length);
+    if (Object.keys(error).length === 0 && issubmit === true) {
+      console.log("submit");
 
       if (localStorage.getItem("registration")) {
-
         const retrivedata = JSON.parse(localStorage.getItem("registration"));
-        let lastIdIndex = Object.keys(retrivedata).length -1;
-let lastId = retrivedata[lastIdIndex].id;
+        let lastIdIndex = Object.keys(retrivedata).length - 1;
+        let lastId = retrivedata[lastIdIndex].id;
         console.log(retrivedata);
-        regData['id'] = lastId+1;
-        retrivedata.push(regData)
+        regData["id"] = lastId + 1;
+        retrivedata.push(regData);
         localStorage.setItem("registration", JSON.stringify(retrivedata));
-        }
-
-       else {
-       regData['id'] = 1;
+      } else {
+        regData["id"] = 1;
         localStorage.setItem("registration", JSON.stringify([regData]));
       }
       navigate("/login");
     } else {
       console.log("error existed");
-    
     }
-  
-  }
+  };
   return (
     <>
       <div className="form">

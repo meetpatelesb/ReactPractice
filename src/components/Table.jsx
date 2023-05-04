@@ -1,4 +1,5 @@
 import React from "react";
+import Pagination from "./Pagination";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 const months = [
@@ -110,6 +111,7 @@ const Table = (props) => {
         return 0;
       });
     }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sortedField]);
 
   // searching.....
@@ -117,6 +119,9 @@ const Table = (props) => {
   const search = (e) => {
     console.log(e.target.value);
     console.log(records);
+
+    let removeRecords = [...records]
+    // delete index.receipt
     if (e.target.value === "") {
       setSortedData(records);
     } else {
@@ -128,8 +133,11 @@ const Table = (props) => {
           index.transactionDate.value.toLowerCase().includes(e.target.value) ||
           index.transactionType.value.toLowerCase().includes(e.target.value) ||
           index.transactionAmount.value.toLowerCase().includes(e.target.value)
+        // console.log(index.id,index.receipt)
+        
+        
+          // console.log(index['id'])
        ) );
-        // console.log(index);
         // for (let field in index) {
         //   console.log(index[field]);
         //   console.log(index[field].value);
@@ -146,8 +154,11 @@ const Table = (props) => {
   };
 
   // pagination.........
+
   const [currentPage, setCurrentPage] = useState(1);
-  const [postPerPage, setPostPerPage] = useState(3);
+  const [postPerPage, setPostPerPage] = useState(2);
+
+  
   const lastPostIndex = currentPage * postPerPage;
   const firstPostIndex = lastPostIndex - postPerPage;
   let pagiData = [...sortedData];
@@ -159,6 +170,7 @@ const Table = (props) => {
     pages.push(i);
   }
   let nThPage = pages.length;
+
 
   return (
     <>
@@ -225,43 +237,46 @@ const Table = (props) => {
           <th>Action</th>
         </thead>
         <tbody>
-          {paginationData && (paginationData.map((transaction, count) => (
-            <tr>
-              <td>{transaction.transactionDate.value}</td>
-              <td>{transaction.monthYear.value}</td>
-              <td>{transaction.transactionType.value}</td>
-              <td>{transaction.fromAccount.value}</td>
-              <td>{transaction.toAccount.value}</td>
-              <td>
-                {Intl.NumberFormat("en-IN", {
-                  style: "currency",
-                  currency: "INR",
-                }).format(transaction.transactionAmount.value)}
-              </td>
-              <td>
-                <img
-                  src={transaction.receipt.value}
-                  width={50}
-                  height={50}
-                  alt=""
-                />
-              </td>
-              <td>{transaction.notes.value}</td>
-              <td>
-                <Link to={`/create/${transaction.id}`}>Edit</Link>
-              </td>
-              <td>
-                <Link
-                  to={`/transaction/${transaction.id}`}
-                  className="btn-text"
-                >
-                  View
-                </Link>
-              </td>
-            </tr>
-          )))}
+          {paginationData &&
+            paginationData.map((transaction, count) => (
+              <tr>
+                <td>{transaction.transactionDate.value}</td>
+                <td>{transaction.monthYear.value}</td>
+                <td>{transaction.transactionType.value}</td>
+                <td>{transaction.fromAccount.value}</td>
+                <td>{transaction.toAccount.value}</td>
+                <td>
+                  {Intl.NumberFormat("en-IN", {
+                    style: "currency",
+                    currency: "INR",
+                  }).format(transaction.transactionAmount.value)}
+                </td>
+                <td>
+                  <img
+                    src={transaction.receipt.value}
+                    width={50}
+                    height={50}
+                    alt=""
+                  />
+                </td>
+                <td>{transaction.notes.value}</td>
+                <td>
+                  <Link to={`/create/${transaction.id}`}>Edit</Link>
+                </td>
+                <td>
+                  <Link
+                    to={`/transaction/${transaction.id}`}
+                    className="btn-text"
+                  >
+                    View
+                  </Link>
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
+      {/* <Pagination paginationRecords={sortedData}/> */}
+
       <div className="pagination">
         <button
           className="page"
@@ -302,5 +317,4 @@ const Table = (props) => {
     </>
   );
 };
-
 export default Table;
